@@ -1,22 +1,14 @@
-const express = require('express');
 const puppeteer = require('puppeteer');
-const cors = require('cors');
-
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-// Enable CORS
-app.use(cors());
 
 // Utility function to wait for a specified time
 const waitForTimeout = (milliseconds) => {
   return new Promise(resolve => setTimeout(resolve, milliseconds));
 };
 
-app.get('/scrape', async (req, res) => {
+module.exports = async (req, res) => {
   try {
     // Launch the browser
-    const browser = await puppeteer.launch({ headless: false }); // headless: false to see the browser
+    const browser = await puppeteer.launch({ headless: true }); // headless: true for serverless environments
     const page = await browser.newPage();
 
     // Navigate to the login page
@@ -103,8 +95,4 @@ app.get('/scrape', async (req, res) => {
     console.error(error);
     res.status(500).send('Error scraping data');
   }
-});
-
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+};
